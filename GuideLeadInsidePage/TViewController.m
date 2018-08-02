@@ -24,13 +24,31 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+   
+    
+//    _itemFrame = [self getTabBarItemFrameWithCount:self.tabBarController.tabBar.items.count index:2];
+//    
+//    NSLog(@"itemFrame x: %f y: %f w: %f h: %f",_itemFrame.origin.x,_itemFrame.origin.y,_itemFrame.size.width,_itemFrame.size.height);
+    
     [self initView];
     [self initAnimationButton];
+
     
     
-    _itemFrame = [self getTabBarItemFrameWithCount:self.tabBarController.tabBar.items.count index:2];
+    NSUserDefaults *defa = [NSUserDefaults standardUserDefaults];
     
-    NSLog(@"itemFrame x: %f y: %f w: %f h: %f",_itemFrame.origin.x,_itemFrame.origin.y,_itemFrame.size.width,_itemFrame.size.height);
+    if ([defa objectForKey:@"coinMustRun"]) {
+        
+    }else{
+        
+        [_button sendActionsForControlEvents:UIControlEventTouchUpInside];
+        
+        [defa setObject:@"No" forKey:@"coinMustRun"];
+        [defa synchronize];
+        
+    }
+    
+    
 }
 - (void)initView{
     _iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(100, 100, 20, 20)];
@@ -40,15 +58,15 @@
 
 - (void)initAnimationButton{
     
-    _button = [[HHShootButton alloc] initWithFrame:CGRectMake(100,SCREEN_HEIGHT - 100, 22, 22) andEndPoint:self.iconImageView.center];
+    _button = [[HHShootButton alloc] initWithFrame:CGRectMake(_itemFrame.origin.x, SCREEN_HEIGHT - 49 - 22, 22, 22) andEndPoint:self.iconImageView.center];
     [_button setImage:[UIImage imageNamed:@"coin"] forState:UIControlStateNormal];
     _button.setting.animationType = ShootButtonAnimationTypeLine;
     [self.view addSubview:_button];
     
-    HHShootButton *shootBtn = [[HHShootButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 60, SCREEN_HEIGHT - 80, 22, 22) andEndPoint:self.iconImageView.center];
-    [shootBtn setImage:[UIImage imageNamed:@"icon_xin"] forState:UIControlStateNormal];
-    shootBtn.setting.animationType = ShootButtonAnimationTypeLine;
-    [self.view addSubview:shootBtn];
+//    HHShootButton *shootBtn = [[HHShootButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 60, SCREEN_HEIGHT - 80, 22, 22) andEndPoint:self.iconImageView.center];
+//    [shootBtn setImage:[UIImage imageNamed:@"icon_xin"] forState:UIControlStateNormal];
+//    shootBtn.setting.animationType = ShootButtonAnimationTypeLine;
+//    [self.view addSubview:shootBtn];
 }
 - (CGRect)getTabBarItemFrameWithCount:(NSInteger)count index:(NSInteger)index
 {
@@ -66,6 +84,9 @@
     }
     
     return itemFrame;
+}
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
